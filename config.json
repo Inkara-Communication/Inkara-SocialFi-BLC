@@ -1,0 +1,12 @@
+{
+  "dev": {},
+  "main": {},
+  "sepolia": {
+    "Registry": "0x2645ebbbF42d8D412424edd3B28694a648e7C105",
+    "Marketplace": "0x5e3Ac66c50b58a269B0e3cDCe397456977AAa956",
+    "Auction": "0xB7F927A48843BFDe78A432c4a21EAF9BFE4aa30C",
+    "CreatureAccessory": "0x6338DA789d16Dc4bb14e334eB2E8A4fF3B82F370",
+    "Creature": "0xa5C2cd2f73701140BdcA3Db1fbAEEdb660183FEe",
+    "MezasMockCurrency": "0x5B96d64964a5D0E11897c7de49074fD6D4732411"
+  }
+}
