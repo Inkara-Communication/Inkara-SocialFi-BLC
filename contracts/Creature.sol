@@ -24,7 +24,7 @@ contract Creature is ERC721, ERC2981, Ownable {
         setApprovalForAll(auction, true);
     }
 
-    function safeMint(address to, uint256 tokenId) external onlyOwner {
-        _safeMint(to, tokenId, "");
+    function safeMint(address to, uint256 tokenId, string tokenUri) external onlyOwner {
+        _safeMint(to, tokenId, tokenUri);
     }
 }
