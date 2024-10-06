@@ -5,10 +5,9 @@ dotenv.config({ path: __dirname + '/.env' })
 const config: HardhatUserConfig = {
   solidity: '0.8.19',
   networks: {
-    sepolia: {
-      url: `https://sepolia.infura.io/v3/6251478dbc1c4a7aa9404e8ab4d6c538`,
+    amoy: {
+      url: `https://rpc-amoy.polygon.technology`,
       accounts: [`0x${process.env.PRIVATE_KEY}`],
-      gasPrice: 10000000000
     }
   },
   etherscan: {

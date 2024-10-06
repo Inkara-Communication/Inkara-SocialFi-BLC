@@ -17,14 +17,6 @@ interface INFT {
     function safeTransferFrom(
         address from,
         address to,
-        uint256 id,
-        uint256 amount,
-        bytes memory data
-    ) external;
-
-    function safeTransferFrom(
-        address from,
-        address to,
         uint256 tokenId,
         bytes calldata data
     ) external;

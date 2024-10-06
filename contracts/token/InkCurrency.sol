@@ -10,7 +10,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol";
 
-contract MezasMockCurrency is
+contract InkaraCurrency is
     ERC20,
     ERC20Burnable,
     ERC20Snapshot,
@@ -20,7 +20,7 @@ contract MezasMockCurrency is
     ERC20Votes,
     ERC20FlashMint
 {
-    constructor() ERC20("MezasCurrency", "MEDC") ERC20Permit("Mezas") {}
+    constructor() ERC20("Inkara", "INK") ERC20Permit("INK") {}
 
     function snapshot() public onlyOwner {
         _snapshot();
