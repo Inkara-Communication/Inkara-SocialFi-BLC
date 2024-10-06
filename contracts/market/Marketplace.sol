@@ -26,14 +26,8 @@ contract Marketplace is ERC721Holder, ERC1155Holder, Ownable {
         address indexed purchaser,
         address indexed recipient
     );
-    event ClaimSaleNFTs(
-        uint256 indexed id,
-        address indexed owner
-    );
-    event ClaimFunds(
-        address indexed account_of,
-        uint256 indexed new_balance
-    );
+    event ClaimSaleNFTs(uint256 indexed id, address indexed owner);
+    event ClaimFunds(address indexed account_of, uint256 indexed new_balance);
 
     error CanOnlySellOneNFT();
     error SaleIsNotActive();
@@ -182,7 +176,11 @@ contract Marketplace is ERC721Holder, ERC1155Holder, Ownable {
             );
             inkCurrency.transferFrom(msg.sender, artistAddress, royalties);
         } else {
-            inkCurrency.transferFrom(msg.sender, sale_info.owner, sale_info.price);
+            inkCurrency.transferFrom(
+                msg.sender,
+                sale_info.owner,
+                sale_info.price
+            );
         }
 
         nftContract.safeTransferFrom(
@@ -235,15 +233,11 @@ contract Marketplace is ERC721Holder, ERC1155Holder, Ownable {
         SaleInfo memory sale_info = sales[sale_id];
         if (block.timestamp < sale_info.start_time) return "PENDING";
 
-        if (
-            block.timestamp < sale_info.end_time &&
-            !sale_info.has_purchased
-        ) return "ACTIVE";
+        if (block.timestamp < sale_info.end_time && !sale_info.has_purchased)
+            return "ACTIVE";
 
-        if (
-            block.timestamp >= sale_info.end_time ||
-            sale_info.has_purchased
-        ) return "ENDED";
+        if (block.timestamp >= sale_info.end_time || sale_info.has_purchased)
+            return "ENDED";
 
         revert UnexpectedError();
     }

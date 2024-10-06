@@ -124,9 +124,7 @@ contract InkReward is Ownable {
         consecutiveLoginDays[msg.sender] = 0;
     }
 
-    function getAllowedJoinEvent(
-        address user
-    ) external view returns (uint256) {
+    function getAllowedJoinEvent(address user) external view returns (uint256) {
         return allowedJoinEvent[user];
     }
 
@@ -156,10 +154,7 @@ contract InkReward is Ownable {
         allowedMintsERC4671[user] += numMints;
     }
 
-    function incrementMintCountERC721(
-        address user,
-        uint256 numMints
-    ) internal {
+    function incrementMintCountERC721(address user, uint256 numMints) internal {
         allowedMintsERC721[user] += numMints;
     }
 

@@ -30,15 +30,16 @@ contract InkaraRoyal is ERC4671URIStorage, InkReward {
     constructor(
         string memory _socialName,
         string memory _tokenName
-    )
-        ERC4671(_socialName, _tokenName)
-    {}
+    ) ERC4671(_socialName, _tokenName) {}
 
     function createNftRoyal(
         address _ownerOfNftRoyal,
         string memory _tokenURI
     ) external {
-        require(allowedMintsERC4671[_ownerOfNftRoyal] > 0, "No allowed mints remaining");
+        require(
+            allowedMintsERC4671[_ownerOfNftRoyal] > 0,
+            "No allowed mints remaining"
+        );
 
         _mint(_ownerOfNftRoyal);
         OwnerToId[_ownerOfNftRoyal] = emittedCount() - 1;

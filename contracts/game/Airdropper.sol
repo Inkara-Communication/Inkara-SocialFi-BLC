@@ -1,17 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-
+// Cần sửa lại sử dụng merkle airdrop
 contract Airdropper {
-    function multisend(address _tokenAddr, address[] memory _to, uint256 _value) public returns (bool)  {
-        assert(_to.length <= 150);
-        // loop through to addresses and send value
+    function multisend(
+        address _tokenAddr,
+        address[] memory _to,
+        uint256 _value
+    ) public returns (bool) {
+        require(_to.length <= 150, "Too many recipients");
         for (uint8 i = 0; i < _to.length; i++) {
-            assert((ERC20(_tokenAddr).transferFrom(msg.sender, _to[i], _value)) == true);
+            require(
+                ERC20(_tokenAddr).transferFrom(msg.sender, _to[i], _value),
+                "Transfer failed"
+            );
         }
-
         return true;
     }
 }

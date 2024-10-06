@@ -73,13 +73,9 @@ contract ERC4671Consensus is ERC4671, IERC4671Consensus {
         }
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(IERC165, ERC4671)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(IERC165, ERC4671) returns (bool) {
         return
             interfaceId == type(IERC4671Consensus).interfaceId ||
             super.supportsInterface(interfaceId);

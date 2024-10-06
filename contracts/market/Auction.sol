@@ -207,7 +207,7 @@ contract Auction is ERC721Holder, ERC1155Holder, Ownable {
         } else {
             recipient = owner;
         }
-        if(auctions[auction_id].isERC721) {
+        if (auctions[auction_id].isERC721) {
             nftContract.safeTransferFrom(address(this), recipient, nft_id, "");
         }
 
@@ -236,20 +236,17 @@ contract Auction is ERC721Holder, ERC1155Holder, Ownable {
 
         claimable_funds[highestBidder_] += highestBid;
 
-        emit BalanceUpdated(
-            highestBidder_,
-            claimable_funds[highestBidder_]
-        );
+        emit BalanceUpdated(highestBidder_, claimable_funds[highestBidder_]);
         emit AuctionCancelled(auction_id);
     }
 
-    function getAuctionStatus(uint256 auction_id) public view returns (bytes32) {
+    function getAuctionStatus(
+        uint256 auction_id
+    ) public view returns (bytes32) {
         if (auction_id > auction_id_counter || auction_id == 0)
             revert AuctionDoesNotExist();
 
-        if (
-            cancelled_auction[auction_id]
-        ) return "CANCELLED";
+        if (cancelled_auction[auction_id]) return "CANCELLED";
 
         if (claimed[auction_id]) return "ENDED & CLAIMED";
 
@@ -293,10 +290,7 @@ contract Auction is ERC721Holder, ERC1155Holder, Ownable {
         }
         claimable_funds[owner()] += fee;
 
-        emit BalanceUpdated(
-            owner(),
-            claimable_funds[owner()]
-        );
+        emit BalanceUpdated(owner(), claimable_funds[owner()]);
 
         // Artist royalty if artist isn't the seller
         if (auctions[auction_id].owner != artist_address) {

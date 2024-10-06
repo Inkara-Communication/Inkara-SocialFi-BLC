@@ -62,52 +62,36 @@ abstract contract ERC4671 is
     /// @notice Count all tokens assigned to an owner
     /// @param owner Address for whom to query the balance
     /// @return Number of tokens owned by `owner`
-    function balanceOf(address owner)
-        public
-        view
-        virtual
-        override
-        returns (uint256)
-    {
+    function balanceOf(
+        address owner
+    ) public view virtual override returns (uint256) {
         return _indexedTokenIds[owner].length;
     }
 
     /// @notice Get owner of a token
     /// @param tokenId Identifier of the token
     /// @return Address of the owner of `tokenId`
-    function ownerOf(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (address)
-    {
+    function ownerOf(
+        uint256 tokenId
+    ) public view virtual override returns (address) {
         return _getTokenOrRevert(tokenId).owner;
     }
 
     /// @notice Check if a token hasn't been revoked
     /// @param tokenId Identifier of the token
     /// @return True if the token is valid, false otherwise
-    function isValid(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
+    function isValid(
+        uint256 tokenId
+    ) public view virtual override returns (bool) {
         return _getTokenOrRevert(tokenId).valid;
     }
 
     /// @notice Check if an address owns a valid token in the contract
     /// @param owner Address for whom to check the ownership
     /// @return True if `owner` has a valid token, false otherwise
-    function hasValid(address owner)
-        public
-        view
-        virtual
-        override
-        returns (bool)
-    {
+    function hasValid(
+        address owner
+    ) public view virtual override returns (bool) {
         return _numberOfValidTokens[owner] > 0;
     }
 
@@ -121,13 +105,9 @@ abstract contract ERC4671 is
         return _symbol;
     }
 
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (string memory)
-    {
+    function tokenURI(
+        uint256 tokenId
+    ) public view virtual override returns (string memory) {
         require(
             _exists(tokenId),
             "ERC4671Metadata: URI query for nonexistent token"
@@ -154,13 +134,10 @@ abstract contract ERC4671 is
     /// @param owner Address for whom to get the token
     /// @param index Index of the token
     /// @return tokenId of the token
-    function tokenOfOwnerByIndex(address owner, uint256 index)
-        public
-        view
-        virtual
-        override
-        returns (uint256)
-    {
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) public view virtual override returns (uint256) {
         uint256[] storage ids = _indexedTokenIds[owner];
         require(index < ids.length, "Token does not exist");
         return ids[index];
@@ -169,23 +146,15 @@ abstract contract ERC4671 is
     /// @notice Get a tokenId by it's index, where 0 <= index < total()
     /// @param index Index of the token
     /// @return tokenId of the token
-    function tokenByIndex(uint256 index)
-        public
-        view
-        virtual
-        override
-        returns (uint256)
-    {
+    function tokenByIndex(
+        uint256 index
+    ) public view virtual override returns (uint256) {
         return index;
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(ERC165, IERC165)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC165, IERC165) returns (bool) {
         return
             interfaceId == type(IERC4671).interfaceId ||
             interfaceId == type(IERC4671Metadata).interfaceId ||
@@ -224,11 +193,7 @@ abstract contract ERC4671 is
     /// @param owner Address for whom to assign the token
     /// @param tokenId Token identifier to assign to the owner
     /// @param valid Boolean to assert of the validity of the token
-    function _mintUnsafe(
-        address owner,
-        uint256 tokenId,
-        bool valid
-    ) internal {
+    function _mintUnsafe(address owner, uint256 tokenId, bool valid) internal {
         require(
             _tokens[tokenId].owner == address(0),
             "Cannot mint an assigned token"
@@ -252,12 +217,9 @@ abstract contract ERC4671 is
     /// @notice Retrieve a token or revert if it does not exist
     /// @param tokenId Identifier of the token
     /// @return The Token struct
-    function _getTokenOrRevert(uint256 tokenId)
-        internal
-        view
-        virtual
-        returns (Token storage)
-    {
+    function _getTokenOrRevert(
+        uint256 tokenId
+    ) internal view virtual returns (Token storage) {
         Token storage token = _tokens[tokenId];
         require(token.owner != address(0), "Token does not exist");
         return token;
@@ -285,9 +247,10 @@ abstract contract ERC4671 is
     /// @notice Removes an entry in an array by its index
     /// @param array Array for which to remove the entry
     /// @param index Index of the entry to remove
-    function _removeFromUnorderedArray(uint256[] storage array, uint256 index)
-        internal
-    {
+    function _removeFromUnorderedArray(
+        uint256[] storage array,
+        uint256 index
+    ) internal {
         require(index < array.length, "Trying to delete out of bound index");
         if (index != array.length - 1) {
             array[index] = array[array.length - 1];
@@ -299,11 +262,9 @@ abstract contract ERC4671 is
         return _tokens[tokenId].owner != address(0);
     }
 
-    function getOwnerBasedOnIndex(uint256 tokenId)
-        public
-        view
-        returns (address)
-    {
+    function getOwnerBasedOnIndex(
+        uint256 tokenId
+    ) public view returns (address) {
         return _tokens[tokenId].owner;
     }
 }

@@ -16,13 +16,9 @@ abstract contract ERC4671URIStorage is ERC4671 {
     /**
      * @dev See {IERC721Metadata-tokenURI}.
      */
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (string memory)
-    {
+    function tokenURI(
+        uint256 tokenId
+    ) public view virtual override returns (string memory) {
         require(
             _exists(tokenId),
             "ERC4671URIStorage: URI query for nonexistent token"
@@ -50,10 +46,10 @@ abstract contract ERC4671URIStorage is ERC4671 {
      *
      * - `tokenId` must exist.
      */
-    function _setTokenURI(uint256 tokenId, string memory _tokenURI)
-        internal
-        virtual
-    {
+    function _setTokenURI(
+        uint256 tokenId,
+        string memory _tokenURI
+    ) internal virtual {
         require(
             _exists(tokenId),
             "ERC4671URIStorage: URI set of nonexistent token"

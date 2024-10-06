@@ -120,7 +120,9 @@ contract InkGovernor is
         super._setVotingPeriod(newVotingPeriod);
     }
 
-    function setProposalThreshold(uint256 newProposalThreshold) public override onlyOwner {
+    function setProposalThreshold(
+        uint256 newProposalThreshold
+    ) public override onlyOwner {
         super._setProposalThreshold(newProposalThreshold);
     }
 
@@ -130,7 +132,7 @@ contract InkGovernor is
         bytes[] memory calldatas,
         string memory description,
         uint256 newVotingPeriod
-    ) public returns(uint256) {
+    ) public returns (uint256) {
         setVotingPeriod(newVotingPeriod);
         return propose(targets, values, calldatas, description);
     }

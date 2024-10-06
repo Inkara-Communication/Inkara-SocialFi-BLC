@@ -18,7 +18,7 @@ abstract contract InkReward is GovernorCountingSimple, Ownable {
             state(proposalId) == ProposalState.Executed,
             "proposal has not executed"
         );
-        require( 
+        require(
             isReward[msg.sender][proposalId] == false,
             "Address has been reward"
         );
@@ -41,7 +41,7 @@ abstract contract InkReward is GovernorCountingSimple, Ownable {
     }
 
     function withdraw() public onlyOwner {
-        uint256 balance = address( this).balance;
+        uint256 balance = address(this).balance;
         (bool success, ) = address(msg.sender).call{value: balance}("");
         require(success, "withdraw failed!");
     }

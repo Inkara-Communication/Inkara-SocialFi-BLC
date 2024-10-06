@@ -15,10 +15,10 @@ interface IERC4671Enumerable is IERC4671 {
     /// @param owner Address for whom to get the token
     /// @param index Index of the token
     /// @return tokenId of the token
-    function tokenOfOwnerByIndex(address owner, uint256 index)
-        external
-        view
-        returns (uint256);
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) external view returns (uint256);
 
     /// @notice Get a tokenId by it's index, where 0 <= index < total()
     /// @param index Index of the token

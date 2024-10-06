@@ -38,14 +38,22 @@ contract NFTContest is Ownable, InkReward {
     event Voted(uint256 eventId, address voter, address participant);
     event EventConcluded(uint256 eventId, address winner);
 
-    constructor(IERC20 _rewardToken, IERC721 _nftContract, uint256 _rewardForWinner, uint256 _rewardForVoters) {
+    constructor(
+        IERC20 _rewardToken,
+        IERC721 _nftContract,
+        uint256 _rewardForWinner,
+        uint256 _rewardForVoters
+    ) {
         rewardToken = _rewardToken;
         nftContract = _nftContract;
         rewardForWinner = _rewardForWinner;
         rewardForVoters = _rewardForVoters;
     }
 
-    function createEvent(string memory title, uint256 duration) external onlyOwner {
+    function createEvent(
+        string memory title,
+        uint256 duration
+    ) external onlyOwner {
         eventCounter++;
         Event storage newEvent = events[eventCounter];
         newEvent.id = eventCounter;
@@ -55,10 +63,13 @@ contract NFTContest is Ownable, InkReward {
     }
 
     function submitNFT(address user, uint256 eventId, uint256 nftId) external {
-        require(allowedJoinEvent[user] > 0, "No allowed participations remaining");
+        require(
+            allowedJoinEvent[user] > 0,
+            "No allowed participations remaining"
+        );
         require(nftContract.ownerOf(nftId) == user, "You do not own this NFT");
         require(block.timestamp < events[eventId].endTime, "Event has ended");
-        
+
         Event storage e = events[eventId];
         e.participants.push(user);
         decrementJoinEvent(user);
@@ -75,7 +86,10 @@ contract NFTContest is Ownable, InkReward {
         emit Voted(eventId, msg.sender, participant);
     }
 
-    function hasVoted(uint256 eventId, address voter) public view returns (bool) {
+    function hasVoted(
+        uint256 eventId,
+        address voter
+    ) public view returns (bool) {
         Event storage e = events[eventId];
         return e.votes[voter] > 0;
     }

@@ -35,13 +35,9 @@ abstract contract ERC4671Pull is ERC4671, IERC4671Pull {
         _mintUnsafe(recipient, tokenId, valid);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(IERC165, ERC4671)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(IERC165, ERC4671) returns (bool) {
         return
             interfaceId == type(IERC4671Pull).interfaceId ||
             super.supportsInterface(interfaceId);

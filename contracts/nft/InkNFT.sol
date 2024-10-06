@@ -22,7 +22,7 @@ contract InkaraNFT is ERC721, ERC2981, Ownable, InkReward {
     // event
     //--------------------------------------------------------
     event newNftCreated(address user, uint256 tokenId);
-    
+
     //--------------------------------------------------------
     // constructor
     //--------------------------------------------------------
