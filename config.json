@@ -1,10 +1,9 @@
 {
   "dev": {},
   "main": {},
-  "amoy": {
-    "GQBToken": "0x39d4EbdFCd5Bf1D80f483E08a3f132570B1B81A2",
-    "QBLoginBonus": "0xCDBf01fB681E6C94b5473e07bdBD7546D6B23bC3",
-    "MetaTransaction": "0x3e3B8306e12Fc8011b713CD696d377f4af89F1e6",
-    "GoldRushGame": "0xa2b7d85EECd3e630FB64fa43cc0cA05C2dbDfdF9"
+  "emerald": {
+    "InkaraCurrency": "0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8",
+    "InkaraNFT": "0x090DCcB393D522C07a9FD97A41451b91Bb00D39b",
+    "InkaraReward": "0x1F0943B1B64997F1687d7ED67a7A13a53fF19EF9"
   }
 }

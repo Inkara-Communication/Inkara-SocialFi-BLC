@@ -223,7 +223,7 @@ describe("Rades Marketplace", function () {
     )
   });
 
-  // it("metadata has already been used to mint an NFT.", async function () {
+  // it("metadata has already been used to mint an Nft.", async function () {
   //   const { instance, addr1, addr2 } = await deployContractFixture();
 
   //   const addr1InitialOwnerBalance = await instance.balanceOf(addr1.address)
@@ -246,7 +246,7 @@ describe("Rades Marketplace", function () {
   //   expect(addr2InitialOwnerBalance).to.equal(0)
   //   expect(addr2NewOwnerBalance).to.equal(addr2InitialOwnerBalance)
   //   expect(mintTokenErrorMessage).not.be.null
-  //   expect(mintTokenErrorMessage!!.message).to.contain("This metadata has already been used to mint an NFT.")
+  //   expect(mintTokenErrorMessage!!.message).to.contain("This metadata has already been used to mint an Nft.")
 
   // });
 

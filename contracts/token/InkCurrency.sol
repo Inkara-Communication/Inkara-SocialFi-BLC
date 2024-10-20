@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20FlashMint.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Capped.sol";
 
 contract InkaraCurrency is
     ERC20,
@@ -18,9 +19,16 @@ contract InkaraCurrency is
     Pausable,
     ERC20Permit,
     ERC20Votes,
-    ERC20FlashMint
+    ERC20FlashMint,
+    ERC20Capped
 {
-    constructor() ERC20("Inkara", "INK") ERC20Permit("INK") {}
+    constructor()
+        ERC20("Inkara", "INK")
+        ERC20Permit("INK")
+        ERC20Capped(100_000_000 * 10 ** decimals())
+    {
+        _mint(msg.sender, 1_000_000 * 10 ** decimals());
+    }
 
     function snapshot() public onlyOwner {
         _snapshot();
@@ -59,7 +67,7 @@ contract InkaraCurrency is
     function _mint(
         address to,
         uint256 amount
-    ) internal override(ERC20, ERC20Votes) {
+    ) internal override(ERC20, ERC20Votes, ERC20Capped) {
         super._mint(to, amount);
     }
 

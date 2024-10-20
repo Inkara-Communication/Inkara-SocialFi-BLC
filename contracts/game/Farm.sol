@@ -533,7 +533,7 @@ contract FarmV2 {
     /**
         Multi-token economy configurability below
      */
-    // An in game material - Crafted Item, NFT or resource
+    // An in game material - Crafted Item, Nft or resource
     struct Material {
         address materialAddress;
         bool exists;

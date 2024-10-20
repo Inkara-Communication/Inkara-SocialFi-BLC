@@ -154,7 +154,7 @@ contract Marketplace is ERC721Holder, ERC1155Holder, Ownable {
         }
 
         SaleInfo memory sale_info = sales[sale_id];
-        if (sale_info.has_purchased) revert NotEnoughStock(); // Đảm bảo NFT chưa được bán
+        if (sale_info.has_purchased) revert NotEnoughStock();
 
         INFT nftContract = INFT(sale_info.nft_address);
 

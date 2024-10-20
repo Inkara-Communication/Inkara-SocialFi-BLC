@@ -50,7 +50,7 @@ contract Auction is ERC721Holder, ERC1155Holder, Ownable {
         uint256 nft_id;
         bool isERC721;
         address nft_address;
-        address owner; // NFT owner address
+        address owner; // Nft owner address
         uint256 start_time;
         uint256 end_time;
         uint256 reserve_price; // may need to be made private

@@ -10,7 +10,7 @@ import "../../reward/InkReward.sol";
 //------------------------------------------------------------
 // InkaraRoyal(ERC4671)
 //------------------------------------------------------------
-contract InkaraRoyal is ERC4671URIStorage, InkReward {
+contract InkaraRoyal is ERC4671URIStorage, InkaraReward {
     //--------------------------------------------------------
     // variables
     //--------------------------------------------------------
@@ -28,9 +28,10 @@ contract InkaraRoyal is ERC4671URIStorage, InkReward {
     // constructor
     //--------------------------------------------------------
     constructor(
+        IERC20 inkaraCurrency,
         string memory _socialName,
         string memory _tokenName
-    ) ERC4671(_socialName, _tokenName) {}
+    ) InkaraReward(inkaraCurrency) ERC4671(_socialName, _tokenName) {}
 
     function createNftRoyal(
         address _ownerOfNftRoyal,

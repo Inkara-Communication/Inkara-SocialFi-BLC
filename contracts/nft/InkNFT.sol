@@ -8,27 +8,57 @@ import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 import "../reward/InkReward.sol";
+
 //------------------------------------------------------------
 // InkaraNFT(ERC721)
 //------------------------------------------------------------
-contract InkaraNFT is ERC721, ERC2981, Ownable, InkReward {
+
+contract InkaraNFT is ERC721, ERC2981, Ownable, InkaraReward {
     //--------------------------------------------------------
     // variables
     //--------------------------------------------------------
-    string private baseURI;
-    string public baseExtension = ".json";
-
+    uint16 private _tokenIdCounter = 0;
+    mapping(uint256 => string) private _tokenURIs;
     //--------------------------------------------------------
-    // event
+    // events
     //--------------------------------------------------------
     event newNftCreated(address user, uint256 tokenId);
+    event TokenBurned(address user, uint256 tokenId);
+    event TokenRoyaltySet(
+        uint256 tokenId,
+        address receiver,
+        uint16 feeNumerator
+    );
+    event TokenRoyaltyReset(uint256 tokenId);
+
+    //--------------------------------------------------------
+    // errors
+    //--------------------------------------------------------
+    error NotAllowedToMint();
+    error TokenIdAlreadyExists();
+    error NotTokenOwner();
+    error TokenDoesNotExist();
+    error InvalidRoyaltyReceiver();
+    error InvalidFeeNumerator();
 
     //--------------------------------------------------------
     // constructor
     //--------------------------------------------------------
-    constructor(address marketplace, address auction) ERC721("Inkara", "INK") {
-        setApprovalForAll(marketplace, true);
-        setApprovalForAll(auction, true);
+    constructor(
+        IERC20 inkaraCurrency
+    ) InkaraReward(inkaraCurrency) ERC721("Inkara", "INK") {}
+
+    //--------------------------------------------------------
+    // modifier
+    //--------------------------------------------------------
+    modifier onlyMinter(uint256 tokenId) {
+        if (
+            msg.sender != owner() &&
+            msg.sender != ownerOf(tokenId)
+        ) {
+            revert NotTokenOwner();
+        }
+        _;
     }
 
     function supportsInterface(
@@ -40,36 +70,27 @@ contract InkaraNFT is ERC721, ERC2981, Ownable, InkReward {
     }
 
     //=======================================================================
-    // [external/onlyOwner] for ERC2981
+    // [external] for ERC2981
     //=======================================================================
-    function setDefaultRoyalty(
-        address receiver,
-        uint96 feeNumerator
-    ) external onlyOwner {
-        _setDefaultRoyalty(receiver, feeNumerator);
-    }
-
-    function deleteDefaultRoyalty() external onlyOwner {
-        _deleteDefaultRoyalty();
-    }
-
     function setTokenRoyalty(
         uint256 tokenId,
         address receiver,
-        uint96 feeNumerator
-    ) external onlyOwner {
+        uint16 feeNumerator
+    ) external onlyMinter(tokenId) {
+        if (receiver == address(0)) {
+            revert InvalidRoyaltyReceiver();
+        }
+        if (feeNumerator > 10000) {
+            // Assuming 10000 is the max value for 100%
+            revert InvalidFeeNumerator();
+        }
         _setTokenRoyalty(tokenId, receiver, feeNumerator);
+        emit TokenRoyaltySet(tokenId, receiver, feeNumerator);
     }
 
-    function resetTokenRoyalty(uint256 tokenId) external onlyOwner {
+    function resetTokenRoyalty(uint256 tokenId) external onlyMinter(tokenId) {
         _resetTokenRoyalty(tokenId);
-    }
-
-    //--------------------------------------------------------
-    // [external/onlyOwner] setBaseUri
-    //--------------------------------------------------------
-    function setBaseUri(string calldata uri) external onlyOwner {
-        baseURI = uri;
+        emit TokenRoyaltyReset(tokenId);
     }
 
     //-----------------------------------------
@@ -79,58 +100,61 @@ contract InkaraNFT is ERC721, ERC2981, Ownable, InkReward {
         return (ownerOf(tokenId) != address(0));
     }
 
-    //-----------------------------------------
-    // [internal] _baseURI
-    //-----------------------------------------
-    function _baseURI() internal view override returns (string memory) {
-        return baseURI;
-    }
-
     //--------------------------------------------------------
     // [public/override] tokenURI
     //--------------------------------------------------------
-    function tokenURI(
+    function getTokenURI(
         uint256 tokenId
-    ) public view virtual override returns (string memory) {
-        require(
-            _exists(tokenId),
-            "ERC721Metadata: URI query for nonexistent token"
-        );
-
-        string memory currentBaseURI = _baseURI();
-        return
-            bytes(currentBaseURI).length > 0
-                ? string(
-                    abi.encodePacked(
-                        currentBaseURI,
-                        Strings.toString(tokenId),
-                        baseExtension
-                    )
-                )
-                : "";
+    ) public view virtual returns (string memory) {
+        if (!_exists(tokenId)) {
+            revert TokenDoesNotExist();
+        }
+        return _tokenURIs[tokenId];
     }
 
     //--------------------------------------------------------
     // [external] mint
     //--------------------------------------------------------
-    function mint(address user, uint256 tokenId) external {
-        require(allowedMintsERC721[user] > 0, "No allowed mints remaining");
+    function mint(string calldata tokenURI, uint16 feeNumerator) external {
+        uint256 tokenId = _tokenIdCounter;
 
-        _mint(user, tokenId);
-        decrementMintCountERC721(user);
+        if (msg.sender != owner()) {
+            if (allowedMintsERC721[msg.sender] == 0) {
+                revert NotAllowedToMint();
+            }
+        }
 
-        emit newNftCreated(user, tokenId);
+        if (_exists(tokenId)) {
+            revert TokenIdAlreadyExists();
+        }
+
+        _mint(msg.sender, tokenId);
+        _setTokenURI(tokenId, tokenURI);
+
+        if (msg.sender != owner()) {
+            decrementMintCountERC721(msg.sender);
+        }
+
+        _setTokenRoyalty(tokenId, msg.sender, feeNumerator);
+
+        _tokenIdCounter++;
+
+        emit newNftCreated(msg.sender, tokenId);
+    }
+
+    function _setTokenURI(uint256 tokenId, string memory tokenURI) internal {
+        _tokenURIs[tokenId] = tokenURI;
     }
 
     //------------------------------------------------------------------
     // [external] burn
     //------------------------------------------------------------------
     function burn(uint256 tokenId) external {
-        require(
-            msg.sender == owner() || msg.sender == ownerOf(tokenId),
-            "burn: caller is not the owner"
-        );
+        if (msg.sender != owner() && msg.sender != ownerOf(tokenId)) {
+            revert NotTokenOwner();
+        }
 
         _burn(tokenId);
+        emit TokenBurned(msg.sender, tokenId);
     }
 }

@@ -7,26 +7,20 @@ async function main() {
   const [deployer] = await ethers.getSigners()
   console.log('Deploying from address:', deployer.address)
 
-  // const GQBToken = await ethers.getContractFactory('GQBToken')
-  // const GQBTokenInstance = await GQBToken.deploy()
-  // console.log('GQBToken address: ', await GQBTokenInstance.getAddress())
-  // Config.setConfig(network + '.GQBToken', await GQBTokenInstance.getAddress())
+  // const InkaraCurrency = await ethers.getContractFactory('InkaraCurrency')
+  // const InkaraCurrencyInstance = await InkaraCurrency.deploy()
+  // console.log('InkaraCurrency address: ', await InkaraCurrencyInstance.getAddress())
+  // Config.setConfig(network + '.InkaraCurrency', await InkaraCurrencyInstance.getAddress())
 
-  // const QBLoginBonus = await ethers.getContractFactory('QBLoginBonus')
-  // const QBLoginBonusInstance = await QBLoginBonus.deploy('0x39d4EbdFCd5Bf1D80f483E08a3f132570B1B81A2')
-  // console.log('QBLoginBonus address: ', await QBLoginBonusInstance.getAddress())
-  // Config.setConfig(network + '.QBLoginBonus', await QBLoginBonusInstance.getAddress())
+  // const InkaraNFT = await ethers.getContractFactory('InkaraNFT')
+  // const InkaraNftInstance = await InkaraNFT.deploy('0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8')
+  // console.log('InkaraNFT address: ', await InkaraNftInstance.getAddress())
+  // Config.setConfig(network + '.InkaraNFT', await InkaraNftInstance.getAddress())
 
-  // const MetaTransaction = await ethers.getContractFactory('MetaTransaction')
-  // const MetaTransactionInstance = await MetaTransaction.deploy()
-  // console.log('MetaTransaction address: ', await MetaTransactionInstance.getAddress())
-  // Config.setConfig(network + '.MetaTransaction', await MetaTransactionInstance.getAddress())
-
-  const GoldRushGame = await ethers.getContractFactory('GoldRushGame')
-  const GoldRushGameInstance = await GoldRushGame.deploy('0x39d4EbdFCd5Bf1D80f483E08a3f132570B1B81A2')
-  console.log('GoldRushGame address: ', await GoldRushGameInstance.getAddress())
-  Config.setConfig(network + '.GoldRushGame', await GoldRushGameInstance.getAddress())
-  
+  // const InkaraReward = await ethers.getContractFactory('InkaraReward')
+  // const InkaraRewardInstance = await InkaraReward.deploy('0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8')
+  // console.log('InkaraReward address: ', await InkaraRewardInstance.getAddress())
+  // Config.setConfig(network + '.InkaraReward', await InkaraRewardInstance.getAddress())
 
   await Config.updateConfig()
 }

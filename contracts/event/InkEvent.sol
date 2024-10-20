@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "../reward/InkReward.sol";
 
-contract NFTContest is Ownable, InkReward {
-    // Token and NFT contracts
+contract NFTContest is Ownable, InkaraReward {
+    // Token and Nft contracts
     IERC20 public rewardToken;
     IERC721 public nftContract;
 
@@ -39,12 +39,12 @@ contract NFTContest is Ownable, InkReward {
     event EventConcluded(uint256 eventId, address winner);
 
     constructor(
-        IERC20 _rewardToken,
+        IERC20 _inkaraCurrency,
         IERC721 _nftContract,
         uint256 _rewardForWinner,
         uint256 _rewardForVoters
-    ) {
-        rewardToken = _rewardToken;
+    ) InkaraReward(_inkaraCurrency) {
+        rewardToken = _inkaraCurrency;
         nftContract = _nftContract;
         rewardForWinner = _rewardForWinner;
         rewardForVoters = _rewardForVoters;
@@ -67,7 +67,7 @@ contract NFTContest is Ownable, InkReward {
             allowedJoinEvent[user] > 0,
             "No allowed participations remaining"
         );
-        require(nftContract.ownerOf(nftId) == user, "You do not own this NFT");
+        require(nftContract.ownerOf(nftId) == user, "You do not own this Nft");
         require(block.timestamp < events[eventId].endTime, "Event has ended");
 
         Event storage e = events[eventId];
