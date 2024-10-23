@@ -3,7 +3,7 @@ import '@nomicfoundation/hardhat-toolbox'
 import * as dotenv from 'dotenv'
 dotenv.config({ path: __dirname + '/.env' })
 const config: HardhatUserConfig = {
-  solidity: '0.8.26',
+  solidity: '0.8.19',
   networks: {
     emerald: {
       url: `https://testnet.emerald.oasis.io`,
@@ -15,3 +15,5 @@ const config: HardhatUserConfig = {
     apiKey: process.env.API_KEY
   }
 }
+
+export default config
