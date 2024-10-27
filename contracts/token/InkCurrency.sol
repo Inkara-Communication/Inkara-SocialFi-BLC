@@ -24,7 +24,7 @@ contract InkaraCurrency is
 {
     constructor()
         ERC20("Inkara", "INK")
-        ERC20Permit("INK")
+        ERC20Permit("Inkara")
         ERC20Capped(100_000_000 * 10 ** decimals())
     {
         _mint(msg.sender, 1_000_000 * 10 ** decimals());
@@ -76,5 +76,11 @@ contract InkaraCurrency is
         uint256 amount
     ) internal override(ERC20, ERC20Votes) {
         super._burn(account, amount);
+    }
+
+    function transferFromWithPermit(address from, address to, uint256 amount, uint256 deadline, uint8 v, bytes32 r, bytes32 s) public {
+        require(amount > 0, "Cannot send 0");
+        permit(from, msg.sender, amount, deadline, v, r, s);
+        transferFrom(from, to, amount);
     }
 }
