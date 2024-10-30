@@ -7,20 +7,25 @@ async function main() {
   const [deployer] = await ethers.getSigners()
   console.log('Deploying from address:', deployer.address)
 
-  // const InkaraCurrency = await ethers.getContractFactory('InkaraCurrency')
-  // const InkaraCurrencyInstance = await InkaraCurrency.deploy()
-  // console.log('InkaraCurrency address: ', await InkaraCurrencyInstance.getAddress())
-  // Config.setConfig(network + '.InkaraCurrency', await InkaraCurrencyInstance.getAddress())
+  const InkaraCurrency = await ethers.getContractFactory('InkaraCurrency')
+  const InkaraCurrencyInstance = await InkaraCurrency.deploy()
+  console.log('InkaraCurrency address: ', await InkaraCurrencyInstance.getAddress())
+  Config.setConfig(network + '.InkaraCurrency', await InkaraCurrencyInstance.getAddress())
 
-  // const InkaraNFT = await ethers.getContractFactory('InkaraNFT')
-  // const InkaraNftInstance = await InkaraNFT.deploy('0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8')
-  // console.log('InkaraNFT address: ', await InkaraNftInstance.getAddress())
-  // Config.setConfig(network + '.InkaraNFT', await InkaraNftInstance.getAddress())
+  const InkaraNFT = await ethers.getContractFactory('InkaraNFT')
+  const InkaraNftInstance = await InkaraNFT.deploy('0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8')
+  console.log('InkaraNFT address: ', await InkaraNftInstance.getAddress())
+  Config.setConfig(network + '.InkaraNFT', await InkaraNftInstance.getAddress())
 
-  // const InkaraReward = await ethers.getContractFactory('InkaraReward')
-  // const InkaraRewardInstance = await InkaraReward.deploy('0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8')
-  // console.log('InkaraReward address: ', await InkaraRewardInstance.getAddress())
-  // Config.setConfig(network + '.InkaraReward', await InkaraRewardInstance.getAddress())
+  const InkaraReward = await ethers.getContractFactory('InkaraReward')
+  const InkaraRewardInstance = await InkaraReward.deploy('0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8')
+  console.log('InkaraReward address: ', await InkaraRewardInstance.getAddress())
+  Config.setConfig(network + '.InkaraReward', await InkaraRewardInstance.getAddress())
+
+  const InkaraBadge = await ethers.getContractFactory('InkaraBadge')
+  const InkaraBadgeInstance = await InkaraBadge.deploy('0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8')
+  console.log('InkaraBadge address: ', await InkaraBadgeInstance.getAddress())
+  Config.setConfig(network + '.InkaraBadge', await InkaraBadgeInstance.getAddress())
 
   await Config.updateConfig()
 }
