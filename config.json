@@ -2,8 +2,8 @@
   "dev": {},
   "main": {},
   "emerald": {
-    "InkaraCurrency": "0x45e6Ba371cDd3038931FEBBE13f80D416e9D8CD8",
-    "InkaraNFT": "0x090DCcB393D522C07a9FD97A41451b91Bb00D39b",
-    "InkaraRewardcd": "0x1F0943B1B64997F1687d7ED67a7A13a53fF19EF9"
+    "InkaraCurrency": "0x0338886577FF2796e5Aad53EC78a1896645EE392",
+    "InkaraNFT": "0x846e26Cd69Ed92882b42AFA893322c2C28605AfE",
+    "InkaraBadge": "0x3874b0DA83F5243989fe4C58aD09C38c04bbFeD3"
   }
 }
