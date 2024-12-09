@@ -7,13 +7,13 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/common/ERC2981.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-import "../reward/InkReward.sol";
+import "../utils/signature.sol";
 
 //------------------------------------------------------------
 // InkaraNFT(ERC721)
 //------------------------------------------------------------
 
-contract InkaraNFT is ERC721, ERC2981, Ownable, InkaraReward {
+contract InkaraNFT is ERC721, ERC2981, Ownable, SignMesssage {
     //--------------------------------------------------------
     // variables
     //--------------------------------------------------------
@@ -23,6 +23,7 @@ contract InkaraNFT is ERC721, ERC2981, Ownable, InkaraReward {
     // mapping
     //--------------------------------------------------------
     mapping(uint256 => string) private _tokenURIs;
+    mapping(address => uint256) public nonces;
 
     //--------------------------------------------------------
     // events
@@ -49,9 +50,7 @@ contract InkaraNFT is ERC721, ERC2981, Ownable, InkaraReward {
     //--------------------------------------------------------
     // constructor
     //--------------------------------------------------------
-    constructor(
-        IERC20 inkaraCurrency
-    ) InkaraReward(inkaraCurrency) ERC721("Inkara", "INK") {}
+    constructor() ERC721("Inkara", "INK") {}
 
     //--------------------------------------------------------
     // modifier
@@ -120,25 +119,24 @@ contract InkaraNFT is ERC721, ERC2981, Ownable, InkaraReward {
     //--------------------------------------------------------
     // [external] mint
     //--------------------------------------------------------
-    function mint(string calldata tokenURI, uint16 feeNumerator) external {
-        uint256 tokenId = _tokenIdCounter;
+    function mint(string calldata tokenURI, uint16 feeNumerator, uint256 nonce, bytes memory signature) external {
+        require(nonce == nonces[msg.sender], "Invalid nonce");
+        string memory action = "mintNft721";
+        
+        bytes32 messageHash = getMessageHash(msg.sender, action, nonce);
+        require(verifySignature(messageHash, signature), "Invalid signature");
 
-        if (msg.sender != owner()) {
-            if (allowedMintsERC721[msg.sender] == 0) {
-                revert NotAllowedToMint();
-            }
-        }
+        uint256 tokenId = _tokenIdCounter;
 
         if (_exists(tokenId)) {
             revert TokenIdAlreadyExists();
         }
 
         _mint(msg.sender, tokenId);
-        _setTokenURI(tokenId, tokenURI);
 
-        if (msg.sender != owner()) {
-            decrementMintCountERC721(msg.sender);
-        }
+        nonces[msg.sender]++;
+
+        _setTokenURI(tokenId, tokenURI);
 
         _setTokenRoyalty(tokenId, msg.sender, feeNumerator);
 

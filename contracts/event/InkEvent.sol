@@ -5,12 +5,17 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "../reward/InkReward.sol";
+import "../utils/signature.sol";
 
-contract NFTContest is Ownable, InkaraReward {
+contract NFTContest is Ownable, SignMesssage {
     // Token and Nft contracts
     IERC20 public rewardToken;
     IERC721 public nftContract;
+    // State variables
+    uint256 public eventCounter;
+    // Reward distribution
+    uint256 public rewardForWinner;
+    uint256 public rewardForVoters;
 
     // Event structure
     struct Event {
@@ -24,14 +29,9 @@ contract NFTContest is Ownable, InkaraReward {
         mapping(address => bool) hasVoted;
     }
 
-    // State variables
-    uint256 public eventCounter;
     mapping(uint256 => Event) public events;
     mapping(uint256 => address[]) public eventParticipants;
-
-    // Reward distribution
-    uint256 public rewardForWinner;
-    uint256 public rewardForVoters;
+    mapping(address => uint256) public nonces;
 
     event EventCreated(uint256 eventId, string name, uint256 endTime);
     event NFTSubmitted(uint256 eventId, address participant, uint256 nftId);
@@ -43,7 +43,7 @@ contract NFTContest is Ownable, InkaraReward {
         IERC721 _nftContract,
         uint256 _rewardForWinner,
         uint256 _rewardForVoters
-    ) InkaraReward(_inkaraCurrency) {
+    ) {
         rewardToken = _inkaraCurrency;
         nftContract = _nftContract;
         rewardForWinner = _rewardForWinner;
@@ -62,17 +62,18 @@ contract NFTContest is Ownable, InkaraReward {
         emit EventCreated(eventCounter, title, newEvent.endTime);
     }
 
-    function submitNFT(address user, uint256 eventId, uint256 nftId) external {
-        require(
-            allowedJoinEvent[user] > 0,
-            "No allowed participations remaining"
-        );
+    function submitNFT(address user, uint256 eventId, uint256 nftId, uint256 nonce, bytes memory signature) external {
+        require(nonce == nonces[msg.sender], "Invalid nonce");
+        string memory action = "submitNft";
+        
+        bytes32 messageHash = getMessageHash(msg.sender, action, nonce);
+        require(verifySignature(messageHash, signature), "Invalid signature");
         require(nftContract.ownerOf(nftId) == user, "You do not own this Nft");
         require(block.timestamp < events[eventId].endTime, "Event has ended");
 
         Event storage e = events[eventId];
         e.participants.push(user);
-        decrementJoinEvent(user);
+        nonces[msg.sender]++;
 
         emit NFTSubmitted(eventId, user, nftId);
     }

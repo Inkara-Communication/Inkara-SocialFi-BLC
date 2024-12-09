@@ -5,12 +5,12 @@ pragma solidity ^0.8.0;
 import "./common/ERC4671.sol";
 import "./common/ERC4671URIStorage.sol";
 
-import "../../reward/InkReward.sol";
+import "../../utils/signature.sol";
 
 //------------------------------------------------------------
 // InkaraBadge(ERC4671)
 //------------------------------------------------------------
-contract InkaraBadge is ERC4671URIStorage, InkaraReward {
+contract InkaraBadge is ERC4671URIStorage, SignMesssage {
     //--------------------------------------------------------
     // variables
     //--------------------------------------------------------
@@ -20,6 +20,8 @@ contract InkaraBadge is ERC4671URIStorage, InkaraReward {
     // mapping
     //--------------------------------------------------------
     mapping(uint256 => string) private _tokenURIs;
+    mapping(address => uint256) public nonces;
+
 
     // Events
     event newNftBadgeCreated(address owner, uint256 id);
@@ -35,9 +37,7 @@ contract InkaraBadge is ERC4671URIStorage, InkaraReward {
     //--------------------------------------------------------
     // constructor
     //--------------------------------------------------------
-    constructor(
-        IERC20 inkaraCurrency
-    ) InkaraReward(inkaraCurrency) ERC4671("InkaraBadge", "INKB") {
+    constructor() ERC4671("InkaraBadge", "INKB") {
         _tokenIdCounter = emittedCount();
     }
 
@@ -68,25 +68,25 @@ contract InkaraBadge is ERC4671URIStorage, InkaraReward {
     }
 
     function createNftRoyal(
-        string calldata tokenURI
+        string calldata tokenURI, uint256 nonce, bytes memory signature
     ) external {
+        require(nonce == nonces[msg.sender], "Invalid nonce");
+        string memory action = "mintNft4671";
+        
+        bytes32 messageHash = getMessageHash(msg.sender, action, nonce);
+        require(verifySignature(messageHash, signature), "Invalid signature");
+
         uint256 tokenId = _tokenIdCounter;
-        if (msg.sender != owner()) {
-            if (allowedMintsERC4671[msg.sender] == 0) {
-                revert NotAllowedToMint();
-            }
-        }
 
         if (_exists(tokenId)) {
             revert TokenIdAlreadyExists();
         }
 
         _mint(msg.sender);
-        _setTokenURI(tokenId, tokenURI);
 
-        if (msg.sender != owner()) {
-            decrementMintCountERC4671(msg.sender);
-        }
+        nonces[msg.sender]++;
+
+        _setTokenURI(tokenId, tokenURI);
 
         emit newNftBadgeCreated(msg.sender, tokenId);
     }
