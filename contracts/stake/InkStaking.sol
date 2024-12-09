@@ -5,9 +5,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IKaineStaking} from "./interfaces/IKaineStaking.sol";
+import {IInkStaking} from "./interfaces/IInkStaking.sol";
 
-contract KaineStaking is IKaineStaking, Ownable, ReentrancyGuard, Pausable {
+contract InkStaking is IInkStaking, Ownable, ReentrancyGuard, Pausable {
     IERC20 public stakingToken;
 
     struct PoolInfo {

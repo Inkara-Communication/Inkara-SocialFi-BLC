@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-interface IKaineBridgeERC20 {
+interface IInkBridgeERC20 {
     function addERC20TokenWrapped(
         string memory _name,
         string memory _symbol

@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ERC20TokenWrapped.sol";
 
-contract KaineBridgeERC20 is Ownable {
+contract InkaraBridgeERC20 is Ownable {
     address public bridgeAddress;
     address[] public allERC20TokenAddress;
     bytes32[] public allERC20TxHash;

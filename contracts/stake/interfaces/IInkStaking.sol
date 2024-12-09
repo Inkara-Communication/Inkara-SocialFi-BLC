@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-interface IKaineStaking {
+interface IInkStaking {
     // Unique Event Declarations
     event Staked(
         address indexed user,

@@ -3,10 +3,10 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "./interfaces/IKaineBridgeERC20.sol";
+import "./interfaces/IInkBridgeERC20.sol";
 import "./BridgeFeeRates.sol";
 
-contract KaineBridgeManage is Ownable {
+contract InkaraBridgeManage is Ownable {
     bytes32[] public allNativeTokenTxHash;
 
     address public bridgeERC20Address;
@@ -104,7 +104,7 @@ contract KaineBridgeManage is Ownable {
         string memory _name,
         string memory _symbol
     ) external onlyOwner returns (address) {
-        address tokenWrappedAddress = IKaineBridgeERC20(bridgeERC20Address)
+        address tokenWrappedAddress = IInkBridgeERC20(bridgeERC20Address)
             .addERC20TokenWrapped(_name, _symbol);
         emit AddERC20TokenWrapped(tokenWrappedAddress, _name, _symbol);
         return tokenWrappedAddress;
@@ -113,7 +113,7 @@ contract KaineBridgeManage is Ownable {
     function addExternalERC20Token(
         address token
     ) external onlyOwner whenNotPaused {
-        IKaineBridgeERC20(bridgeERC20Address).addExternalERC20Token(token);
+        IInkBridgeERC20(bridgeERC20Address).addExternalERC20Token(token);
         emit AddExternalERC20Token(token);
     }
 
@@ -123,7 +123,7 @@ contract KaineBridgeManage is Ownable {
         address to,
         uint256 amount
     ) external onlyOwner whenNotPaused {
-        IKaineBridgeERC20(bridgeERC20Address).mintERC20Token(
+        IInkBridgeERC20(bridgeERC20Address).mintERC20Token(
             txHash,
             token,
             to,
@@ -147,7 +147,7 @@ contract KaineBridgeManage is Ownable {
                 revert EtherTransferFailed();
             }
         }
-        IKaineBridgeERC20(bridgeERC20Address).burnERC20Token(
+        IInkBridgeERC20(bridgeERC20Address).burnERC20Token(
             msg.sender,
             token,
             amount
@@ -160,7 +160,7 @@ contract KaineBridgeManage is Ownable {
         address account,
         bool state
     ) external onlyOwner {
-        IKaineBridgeERC20(bridgeERC20Address).setBlackListERC20Token(
+        IInkBridgeERC20(bridgeERC20Address).setBlackListERC20Token(
             token,
             account,
             state
@@ -209,11 +209,11 @@ contract KaineBridgeManage is Ownable {
 
     function allERC20TokenAddressLength() public view returns (uint256) {
         return
-            IKaineBridgeERC20(bridgeERC20Address).allERC20TokenAddressLength();
+            IInkBridgeERC20(bridgeERC20Address).allERC20TokenAddressLength();
     }
 
     function allERC20TxHashLength() public view returns (uint256) {
-        return IKaineBridgeERC20(bridgeERC20Address).allERC20TxHashLength();
+        return IInkBridgeERC20(bridgeERC20Address).allERC20TxHashLength();
     }
 
     function allNativeTokenTxHashLength() public view returns (uint256) {
@@ -224,7 +224,7 @@ contract KaineBridgeManage is Ownable {
         address user
     ) public view returns (uint256) {
         return
-            IKaineBridgeERC20(bridgeERC20Address).userERC20MintTxHashLength(
+            IInkBridgeERC20(bridgeERC20Address).userERC20MintTxHashLength(
                 user
             );
     }
