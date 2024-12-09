@@ -22,7 +22,7 @@ contract InkaraBadge is ERC4671URIStorage, InkaraReward {
     mapping(uint256 => string) private _tokenURIs;
 
     // Events
-    event newNftRoyalCreated(address owner, uint256 id);
+    event newNftBadgeCreated(address owner, uint256 id);
 
     //--------------------------------------------------------
     // errors
@@ -88,7 +88,7 @@ contract InkaraBadge is ERC4671URIStorage, InkaraReward {
             decrementMintCountERC4671(msg.sender);
         }
 
-        emit newNftRoyalCreated(msg.sender, tokenId);
+        emit newNftBadgeCreated(msg.sender, tokenId);
     }
 
     function _setTokenURI(uint256 tokenId, string memory tokenURI) internal override {
